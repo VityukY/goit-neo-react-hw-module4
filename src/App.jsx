@@ -46,8 +46,7 @@ function App() {
       try {
         setLoad(true);
         const { data } = await getImages(query, page);
-        console.log('data :>> ', data);
-        console.log('data.results :>> ', data.results);
+
         if(data.total_pages == page) {
           setLoadButton(false)
         }
@@ -86,7 +85,12 @@ function App() {
         />
       )}
       {isLoad&&<Loader />}
-      {loadButton && images.length > 0 && isLoad==false && <button onClick={() => setPage(page + 1)}>Load More</button>}
+      {loadButton &&
+       images.length > 0 &&
+       isLoad==false &&
+       <button 
+       onClick={() => setPage(page + 1)}>
+        Load More</button>}
       {modalIsOpen && <ImageModal 
         modalIsOpen={modalIsOpen} 
         closeHandler={closeModal} 

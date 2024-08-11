@@ -1,3 +1,4 @@
+import styles from './SearchBar.module.css'
 
 export default function SearchBar({queryHandler}){
  
@@ -11,8 +12,8 @@ export default function SearchBar({queryHandler}){
         console.log('empty query');
       }
    }
-   return <header>
-   <form onSubmit={searchHandler}>
+   return <header className={styles.header}>
+   <form className={styles.form} onSubmit={searchHandler}>
      <input
 
       name="searchBar"

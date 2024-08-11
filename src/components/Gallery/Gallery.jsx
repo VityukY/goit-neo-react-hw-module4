@@ -1,10 +1,12 @@
+import styles from './Gallery.module.css'
 import Image from "../Image/Image" 
 export default function Gallery ({images, modalHandler , lastImageRef }) {
 
    return <>
-      <ul >
+      <ul className={styles.gallery}>
         {images.map((image, index) => {
              return  <li 
+             className={styles.galleryItem}
              key={image.id}
              ref={index === images.length - 8 ? lastImageRef : null}
              >
