@@ -33,6 +33,7 @@ function App() {
   }
   function queryUpdate (query) {
     updateImages([])
+    setLoadButton(true)
     setLoad(true)
     queryHandler(query)
     setLoad(false)
@@ -44,6 +45,7 @@ function App() {
   useEffect(() => {
     const fetchImages = async () => {
       try {
+        setLoadButton(true)
         setLoad(true);
         const { data } = await getImages(query, page);
 
