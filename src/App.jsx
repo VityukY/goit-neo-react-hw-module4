@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import SearchBar from './components/SearchBar/SearchBar'
-import Gallery from './components/Gallery/Gallery'
+import ImageGallery from './components/ImageGallery/ImageGallery'
 import ImageModal from './components/ImageModal/ImageModal'
 import Loader from './components/Loader/Loader'
 import './App.css'
 import getImages from './photo-api'
-
+import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn'
 import toast, { Toaster } from 'react-hot-toast';
-
+import ErrorMessage from './components/ErrorMessage/ErrorMessage'
 
 function App() {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -18,7 +18,7 @@ function App() {
   const [isLoad, setLoad] = useState(false)
   const lastImageRef = useRef(null);
   const [loadButton, setLoadButton] = useState(true)
-  
+  const [errorMessage, setError] = useState('')
   function openModal() {
     setIsOpen(true);
   }
@@ -32,6 +32,8 @@ function App() {
     openModal()
   }
   function queryUpdate (query) {
+    setError('')
+    setPage(1)
     updateImages([])
     setLoadButton(true)
     setLoad(true)
@@ -41,7 +43,9 @@ function App() {
   function imageHandler(newImages) {
     updateImages((prevImages) => [...prevImages, ...newImages])
   }
-
+  function pageUpdate () {
+    setPage(page+1)
+  }
   useEffect(() => {
     const fetchImages = async () => {
       try {
@@ -51,9 +55,11 @@ function App() {
 
         if(data.total_pages == page) {
           setLoadButton(false)
+          setError('During loading mistake occur')
         }
         if (data.results.length==0){
           toast.error('No results');
+          setError('No result')
           return
         }
         imageHandler(data.results);
@@ -78,21 +84,23 @@ function App() {
 
   return (
     <>
-      <SearchBar queryHandler={queryUpdate} />
+      <SearchBar 
+      galleryCleaner={()=>{updateImages([])}}
+      queryHandler={queryUpdate} errorSetter={(errorMessage)=>{setError(errorMessage)}}/>
       {images.length > 0 && (
-        <Gallery 
+        <ImageGallery 
           images={images} 
           modalHandler={modalImageSetter} 
           lastImageRef={lastImageRef} // Pass the ref to the Gallery component
         />
       )}
       {isLoad&&<Loader />}
+      {errorMessage!='' && <ErrorMessage errorMessage = {errorMessage} />}
       {loadButton &&
        images.length > 0 &&
        isLoad==false &&
-       <button 
-       onClick={() => setPage(page + 1)}>
-        Load More</button>}
+       <LoadMoreBtn pageUpdate={pageUpdate}/>
+       }
       {modalIsOpen && <ImageModal 
         modalIsOpen={modalIsOpen} 
         closeHandler={closeModal} 

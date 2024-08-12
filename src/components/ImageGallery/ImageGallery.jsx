@@ -1,6 +1,6 @@
-import styles from './Gallery.module.css'
-import Image from "../Image/Image" 
-export default function Gallery ({images, modalHandler , lastImageRef }) {
+import styles from './ImageGallery.module.css'
+import ImageCard from "../ImageCard/ImageCard" 
+export default function ImageGallery ({images, modalHandler , lastImageRef }) {
 
    return <>
       <ul className={styles.gallery}>
@@ -10,7 +10,7 @@ export default function Gallery ({images, modalHandler , lastImageRef }) {
              key={image.id}
              ref={index === images.length - 8 ? lastImageRef : null}
              >
-               <Image 
+               <ImageCard 
                modalHandler={()=>{modalHandler({image:image.urls.regular, alt:image.alt_description})}}
                previewImage={image.urls.small} 
                alt={image.alt_description}/>

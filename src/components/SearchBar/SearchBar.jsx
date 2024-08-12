@@ -1,6 +1,7 @@
 import styles from './SearchBar.module.css'
+import toast from 'react-hot-toast';
 
-export default function SearchBar({queryHandler}){
+export default function SearchBar({queryHandler, errorSetter, galleryCleaner}){
  
    const searchHandler = (e) => {
       e.preventDefault();
@@ -9,7 +10,9 @@ export default function SearchBar({queryHandler}){
       if (query !== '') {
         queryHandler(query)
       } else {
-        console.log('empty query');
+        galleryCleaner();
+        toast.error('Empty query is not allowed');
+        errorSetter('Empty query is not allowed')
       }
    }
    return <header className={styles.header}>
